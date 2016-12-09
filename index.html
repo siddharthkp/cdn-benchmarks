@@ -1,19 +1,36 @@
 <html>
     <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Practo benchmark</title>
         <script src="https://unpkg.com/axios@0.15.3/dist/axios.min.js"></script>
         <script src="mixpanel.js"></script>
         <style>
-            body {font-family: monospace}
-            iframe {opacity: 0}
+            body {
+                font-family: monospace;
+                background: #002133;
+                display: flex;
+                text-align: center;
+            }
+            iframe {
+                opacity: 0;
+                width: 0;
+                heigth: 0;
+            }
+            #status {
+                width: 100%;
+                color: #FFF;
+                font-size: 48px;
+            }
+            #status img {
+                width: 100%;
+            }
         </style>
     </head>
     <body>
-        <div>
-            <span>Running tests</span>
-            <span id="progress">0/12</span>
+        <div id="status">
+            <img src="animation.gif"/>
         </div>
-        <br>
+        <br><br>
         <iframe></iframe>
         <script src="benchmark.js"></script>
     </body>

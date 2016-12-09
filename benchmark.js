@@ -135,9 +135,19 @@ function fetch (d, r) {
 }
 
 var step = 0;
-var progressSelector = document.getElementById('progress');
+var statusSelector = document.getElementById('status');
+var animationDuration = 7000;
+var testsStarted = new Date.getTime();
 
 function progress () {
-    progressSelector.textContent = ++step + '/12';
-    if (step === 12) progressSelector.textContent = ': completed. Thanks!';
+    ++step;
+    if (step === 12) {
+        var testsCompleted = new Date().getTime();
+        var timeTaken = testsCompleted - testsStarted;
+        if (timeTaken < animationDuration) {
+            setTimeout(function(){
+                statusSelector.textContent = 'Tests completed! Thanks!';
+            }, animationDuration - timeTaken);
+        } else statusSelector.textContent = 'Tests completed! Thanks!';
+    }
 }
