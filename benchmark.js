@@ -30,7 +30,7 @@ var domainIdenfier = [
     Download these resources from each of the domain
     Log time taken to mixpanel
 */
-var resources = ['500K.jpg?cache=false', 'haath?cache=false'];
+var resources = ['500K.jpg?cache=false', 'haath.txt?cache=false'];
 startDownloadTests();
 
 /*
