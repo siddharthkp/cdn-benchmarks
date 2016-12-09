@@ -12,17 +12,17 @@ http.defaults.timeout = 5000;
 tagIPAdress();
 
 var domains = [
-    'https://www.practo.info',
     'https://www.practo.io',
     'https://akamaitest.practo.com',
-    'https://benchmarking.practodev.com'
+    'https://benchmarking.practodev.com',
+    'https://www.practo.info'
 ];
 
 var domainIdenfier = [
-    'cloudflare', //www.practo.info
     'cloudfront', //www.practo.io
     'akamai', //http://akamaitest.practo.com
-    'practodev'
+    'practodev',
+    'cloudflare' //www.practo.info
 ];
 
 /*
