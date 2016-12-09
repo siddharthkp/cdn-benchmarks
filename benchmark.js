@@ -134,11 +134,13 @@ function fetch (d, r) {
 
 var step = 0;
 var statusSelector = document.getElementById('status');
+var progressSelector = document.getElementById('progress');
 var animationDuration = 7000;
 var testsStarted = new Date().getTime();
 
 function progress () {
     ++step;
+    progressSelector.style.width = parseInt(100 * step/20, 10) + 'vw';
     if (step === 20) {
         var testsCompleted = new Date().getTime();
         var timeTaken = testsCompleted - testsStarted;

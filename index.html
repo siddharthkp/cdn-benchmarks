@@ -6,6 +6,7 @@
         <script src="mixpanel.js"></script>
         <style>
             body {
+                margin: 0;
                 font-family: sans-serif;
                 background: #002133;
                 display: flex;
@@ -25,10 +26,17 @@
                 mix-width: 100%;
                 mix-height: 100%;
             }
+            #progress {
+                height: 10px;
+                width: 1vw;
+                transition: 1s;
+                background: #0088CC;
+            }
         </style>
     </head>
     <body>
         <div id="status">
+            <div id="progress"></div>
             <img src="animation.gif"/>
         </div>
         <br><br>
