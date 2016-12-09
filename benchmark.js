@@ -15,7 +15,7 @@ var domains = [
     'http://www.practo.info',
     'https://www.practo.io',
     'http://akamaitest.practo.com',
-    'https://benchmarks.practodev.com'
+    'https://benchmarking.practodev.com'
 ];
 
 var domainIdenfier = [
