@@ -26,14 +26,6 @@ var domainIdenfier = [
 ];
 
 /*
-    Download tests
-    Download these resources from each of the domain
-    Log time taken to mixpanel
-*/
-var resources = ['500K.jpg?cache=false', 'haath.txt?cache=false'];
-startDownloadTests();
-
-/*
     Page load test
     Load a html page from each of the domains
     into an iframe
@@ -42,16 +34,19 @@ startDownloadTests();
 
 startPageLoadTests();
 
+/*
+    Download tests - start after page load tests complete
+    Download these resources from each of the domain
+    Log time taken to mixpanel
+*/
 
-
-
-
-
-
-
-
-
-
+var timeNow = new Date().getTime();
+var resources = [
+    '500K.jpg',
+    'haath.txt',
+    '500K.jpg?cache-miss=' + timeNow,
+    'haath.txt??cache-miss=' + timeNow
+];
 
 
 function startPageLoadTests() {
@@ -73,7 +68,10 @@ function load(d) {
 
 function recurLoad(d) {
     if (domains[++d]) load(d);
-    else console.log('all load tests done!');
+    else {
+        console.log('all load tests done!');
+        startDownloadTests();
+    }
 }
 
 function startDownloadTests() {
@@ -137,11 +135,11 @@ function fetch (d, r) {
 var step = 0;
 var statusSelector = document.getElementById('status');
 var animationDuration = 7000;
-var testsStarted = new Date.getTime();
+var testsStarted = new Date().getTime();
 
 function progress () {
     ++step;
-    if (step === 12) {
+    if (step === 20) {
         var testsCompleted = new Date().getTime();
         var timeTaken = testsCompleted - testsStarted;
         if (timeTaken < animationDuration) {
@@ -150,4 +148,5 @@ function progress () {
             }, animationDuration - timeTaken);
         } else statusSelector.textContent = 'Tests completed! Thanks!';
     }
+
 }
