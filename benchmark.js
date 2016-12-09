@@ -4,21 +4,78 @@
     send response time to mixpanel
 */
 
-var fetcher = axios.create();
-fetcher.defaults.timeout = 5000;
+/* New axios instance for http requests */
+var http = axios.create();
+http.defaults.timeout = 5000;
+
+/* Attach IP address to the user */
+tagIPAdress();
 
 var domains = [
-    'http://localhost:3000',
-    'http://localhost:3000'
+    'www.practo.info',
+    'https://www.practo.io',
+    'http://akamaitest.practo.com',
+    'https://benchmarks.practodev.com'
 ];
 
-var resources = ['200.html', '500K.jpg', 'haath'];
+var domainIdenfier = [
+    'cloudflare', //www.practo.info
+    'cloudfront', //www.practo.io
+    'akamai', //http://akamaitest.practo.com
+    'practodev'
+];
 
-tagIPAdress();
-fetch(0, 0);
+/*
+    Download tests
+    Download these resources from each of the domain
+    Log time taken to mixpanel
+*/
+var resources = ['500K.jpg', 'haath'];
+startDownloadTests();
+
+/*
+    Page load test
+    Load a html page from each of the domains
+    into an iframe
+    Log load time to mixpanel
+*/
+
+startPageLoadTests();
+
+
+
+
+
+
+
+
+
+
+
+
+
+function startPageLoadTests() {
+    load(0);
+}
+
+function load(d) {
+    var url = domains[d] + '/200.html';
+    var cnd = domainIdenfier[d];
+    var iframe = document.getElementsByTagName('iframe')[0];
+
+    var start = new Date().getTime();
+    iframe.onload = function () {
+        logTime(cnd, url, start);
+    }
+    iframe.src = url;
+}
+
+function startDownloadTests() {
+    fetch(0, 0); //fetch is a recursive function
+}
 
 function tagIPAdress() {
-    fetcher.get('https://api.ipify.org')
+    http.get('https://api.ipify.org')
     .then(function (response) {
         mixpanel.register({
             ip_address: response.data
@@ -30,33 +87,40 @@ function getUrl(d, r) {
     return domains[d] + '/' + resources[r];
 }
 
-function logTime(d, r, start) {
+function logTime(cdn, url, start) {
     var end = new Date().getTime();
     var timeTaken = end - start;
-    let url = getUrl(d, r);
     console.log(url, timeTaken);
-    mixpanel.track('Download', {
+    var event = 'Download';
+    if (url.indexOf('.html') !== -1) event = 'Page load';
+    mixpanel.track(event, {
         url: url,
         timeTaken: timeTaken,
         connection: navigator.connection.type
     });
+}
+
+function recur(d, r) {
     if (resources[++r]) fetch(d, r);
     else if (domains[++d]) fetch (d, 0);
     else console.log('all done!');
 }
 
 function fetch (d, r) {
-    let url = getUrl(d, r);
+    var url = getUrl(d, r);
+    var cdn = domainIdenfier[d];
     var start = new Date().getTime();
-    fetcher.get(url, {
+    http.get(url, {
         onDownloadProgress: function (progressEvent) {
             // can show stuff to user
         }
     })
     .then(function (response) {
-        logTime(d, r, start);
+        logTime(cdn, url, start);
+        recur(d, r);
     })
     .catch(function (error) {
-        logTime(d, r, start);
+        logTime(cdn, url, start);
+        recur(d, r);
     });
 }
