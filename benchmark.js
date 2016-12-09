@@ -12,7 +12,7 @@ http.defaults.timeout = 5000;
 tagIPAdress();
 
 var domains = [
-    'www.practo.info',
+    'http://www.practo.info',
     'https://www.practo.io',
     'http://akamaitest.practo.com',
     'https://benchmarks.practodev.com'
@@ -30,7 +30,7 @@ var domainIdenfier = [
     Download these resources from each of the domain
     Log time taken to mixpanel
 */
-var resources = ['500K.jpg', 'haath'];
+var resources = ['500K.jpg?cache=false', 'haath?cache=false'];
 startDownloadTests();
 
 /*
@@ -66,8 +66,14 @@ function load(d) {
     var start = new Date().getTime();
     iframe.onload = function () {
         logTime(cnd, url, start);
+        recurLoad(d);
     }
     iframe.src = url;
+}
+
+function recurLoad(d) {
+    if (domains[++d]) load(d);
+    else console.log('all load tests done!');
 }
 
 function startDownloadTests() {
@@ -95,15 +101,17 @@ function logTime(cdn, url, start) {
     if (url.indexOf('.html') !== -1) event = 'Page load';
     mixpanel.track(event, {
         url: url,
+        cdn: cdn,
         timeTaken: timeTaken,
         connection: navigator.connection.type
     });
+    progress();
 }
 
 function recur(d, r) {
     if (resources[++r]) fetch(d, r);
     else if (domains[++d]) fetch (d, 0);
-    else console.log('all done!');
+    else console.log('all assets tests done!');
 }
 
 function fetch (d, r) {
@@ -123,4 +131,11 @@ function fetch (d, r) {
         logTime(cdn, url, start);
         recur(d, r);
     });
+}
+
+var step = 0;
+function progress (){
+    step++;
+    var selector = document.getElementById('status');
+    selector.textContent = step + '/12';
 }
