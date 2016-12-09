@@ -104,7 +104,7 @@ function logTime(cdn, url, start, fail) {
         cdn: cdn,
         timeTaken: timeTaken,
         connection: navigator.connection.type,
-        fail: true
+        fail: fail
     });
     progress();
 }
@@ -121,7 +121,7 @@ function fetch (d, r) {
     var start = new Date().getTime();
     http.get(url, {
         onDownloadProgress: function (progressEvent) {
-            // can show stuff to user
+            // can show partial progress
         }
     })
     .then(function (response) {
@@ -129,14 +129,15 @@ function fetch (d, r) {
         recur(d, r);
     })
     .catch(function (error) {
-        logTime(cdn, url, start, fail);
+        logTime(cdn, url, start, true);
         recur(d, r);
     });
 }
 
 var step = 0;
-function progress (){
-    step++;
-    var selector = document.getElementById('status');
-    selector.textContent = step + '/12';
+var progressSelector = document.getElementById('progress');
+
+function progress () {
+    progressSelector.textContent = ++step + '/12';
+    if (step === 12) progressSelector.textContent = ': completed. Thanks!';
 }
