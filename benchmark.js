@@ -12,9 +12,9 @@ http.defaults.timeout = 5000;
 tagIPAdress();
 
 var domains = [
-    'http://www.practo.info',
+    'https://www.practo.info',
     'https://www.practo.io',
-    'http://akamaitest.practo.com',
+    'https://akamaitest.practo.com',
     'https://benchmarking.practodev.com'
 ];
 
@@ -103,7 +103,7 @@ function logTime(cdn, url, start, fail) {
         url: url,
         cdn: cdn,
         timeTaken: timeTaken,
-        connection: navigator.connection.type,
+        connection: navigator.connection && navigator.connection.type,
         fail: fail
     });
     progress();
