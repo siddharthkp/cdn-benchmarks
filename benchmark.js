@@ -93,7 +93,7 @@ function getUrl(d, r) {
     return domains[d] + '/' + resources[r];
 }
 
-function logTime(cdn, url, start) {
+function logTime(cdn, url, start, fail) {
     var end = new Date().getTime();
     var timeTaken = end - start;
     console.log(url, timeTaken);
@@ -103,7 +103,8 @@ function logTime(cdn, url, start) {
         url: url,
         cdn: cdn,
         timeTaken: timeTaken,
-        connection: navigator.connection.type
+        connection: navigator.connection.type,
+        fail: true
     });
     progress();
 }
@@ -128,7 +129,7 @@ function fetch (d, r) {
         recur(d, r);
     })
     .catch(function (error) {
-        logTime(cdn, url, start);
+        logTime(cdn, url, start, fail);
         recur(d, r);
     });
 }
